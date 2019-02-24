@@ -1,0 +1,20 @@
+<!DOCTYPE xml>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:web="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_1.xsd"
+	version="3.1">
+	<display-name>Archetype Created Web Application</display-name>
+
+	<servlet>
+		<servlet-name>Servlet Name For Demo1</servlet-name>
+		<servlet-class>com.cdi.spring.servlets.ServletDemo1</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Servlet Name For Demo1</servlet-name>
+		<url-pattern>/Demo1</url-pattern>
+	</servlet-mapping>
+
+</web-app>
+
