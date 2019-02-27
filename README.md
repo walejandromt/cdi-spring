@@ -1,5 +1,6 @@
 # CDI-Spring bridge
-https://travis-ci.org/walejandromt/cdi-spring.svg?branch=master
+
+[![Build Status](https://travis-ci.org/walejandromt/cdi-spring.svg?branch=master)](https://travis-ci.org/walejandromt/cdi-spring)
 
 CDI Portable Extension + Spring Bean Puente(Bridge) Spring 5.0.0
 
