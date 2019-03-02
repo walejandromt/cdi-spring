@@ -1,4 +1,4 @@
-package com.cdi.spring.impl;
+package cdi.extension.bridge.spring;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -28,19 +28,23 @@ import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import cdi.extension.bridge.spring.annotation.Spring;
+import cdi.extension.bridge.spring.annotation.SpringLookup;
+
 /**
  * Portable Extension para manejar la reflexion de las
  * anotaciones de Spring y SpringLookup
  * @author walejandromt
  */
-public class TestExtesions implements Extension {
+public class CDIPortableExtesionBridgeSpring implements Extension {
 	
+	@SuppressWarnings("rawtypes")
 	Map <String, SpringBean> springBeans = new HashMap<String, SpringBean>();
-	private static final String RESOURCE_NAME = "spring-cdi.xml";
-    private static final String CLASSLOADER_RESOURCE = "/" + RESOURCE_NAME;
-    private static final String CLASSPATH_RMANNIBUCAU_SPRING_CDI_XML = "classpath:" + RESOURCE_NAME;
+	private static final String RESOURCE_NAME = "Spring-All-Module.xml";
+    private static final String CLASSLOADER_RESOURCE = "/spring/" + RESOURCE_NAME;
+    private static final String CLASSPATH_RMANNIBUCAU_SPRING_CDI_XML = "classpath:" + CLASSLOADER_RESOURCE;
     
-	public TestExtesions() {
+	public CDIPortableExtesionBridgeSpring() {
 		System.out.println(">>>>>>>>>>> Inicia la Extesion");
 	}
 
@@ -67,12 +71,14 @@ public class TestExtesions implements Extension {
 				Spring spring = point.getAnnotated().getAnnotation(Spring.class);
 				if (spring!=null) {
 					System.out.println(">>>>>>>>>>> Inject Spring Anotation");
+					@SuppressWarnings({ "rawtypes", "unchecked" })
 					SpringBean springBean = new SpringBean(pit.getAnnotatedType(), spring, injectionType, bm);
 					springBeans.put(springBean.key(), springBean); //we can do some validation to make sure that this bean is compatible with the one we are replacing.
 				} else {
 					SpringLookup springLookup = point.getAnnotated().getAnnotation(SpringLookup.class);
 					if (springLookup!=null) {
 						System.out.println(">>>>>>>>>>> Inject SpringLookup Anotation");
+						@SuppressWarnings({ "rawtypes", "unchecked" })
 						SpringBean springBean = new SpringBean(springLookup, injectionType, bm);
 						springBeans.put(springBean.key(), springBean);
 					}
@@ -92,7 +98,7 @@ public class TestExtesions implements Extension {
 		
 		if(ctx != null) {
 			synchronized (springBeans) {
-				for (SpringBean bean : springBeans.values()) {
+				for (@SuppressWarnings("rawtypes") SpringBean bean : springBeans.values()) {
 					bean.setAppCtx(ctx);
 					abd.addBean(bean);
 				}	
@@ -119,7 +125,7 @@ public class TestExtesions implements Extension {
 		
 		SpringBean(AnnotatedType<T> annotatedType, Spring spring, Class<T> injectionType, BeanManager bm){
 			this.spring = spring;
-			this.injectionType = injectionType;
+			this.injectionType = injectionType;//En el getName de esta variable se encuentra el nombre de la clase
 			this.bm = bm;
 			this.annotatedType = annotatedType;
 			injectionTarget = bm.createInjectionTarget(bm.createAnnotatedType(injectionType));
@@ -228,7 +234,7 @@ public class TestExtesions implements Extension {
 		}
 
 		public String toString() {
-			return String.format("SpringBean(hc=%d, hc=%d, annotatedType=%s, qualifiers=%s)", this.hashCode(), TestExtesions.this.hashCode(), this.annotatedType, this.getQualifiers() );
+			return String.format("SpringBean(hc=%d, hc=%d, annotatedType=%s, qualifiers=%s)", this.hashCode(), CDIPortableExtesionBridgeSpring.this.hashCode(), this.annotatedType, this.getQualifiers() );
 		}
 		
 		public void setAppCtx(ListableBeanFactory appCtx) {

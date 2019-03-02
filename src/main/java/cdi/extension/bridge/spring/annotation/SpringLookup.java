@@ -1,4 +1,4 @@
-package com.cdi.spring.impl;
+package cdi.extension.bridge.spring.annotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
