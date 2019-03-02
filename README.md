@@ -16,10 +16,10 @@ You have to use this CDI Portable Extension.
 
 ## Create a specific application context
 
-Create a classpath resource called Spring-All-Module.xml and import your spring app
-in this file. It will ignore produced ConfigurableApplicationContext and is portable.
+Create a classpath resource called /spring/Spring-All-Module.xml and import your file configuration of the spring app
+in this file.
 
-## Example for the Spring-All-Module.xml in the resource for you application
+## Example for the Spring-All-Module.xml in the classpath resource for you application
 
     <?xml version="1.0" encoding="UTF-8"?>
     <beans xmlns="http://www.springframework.org/schema/beans"
