@@ -18,7 +18,7 @@ import javax.inject.Named;
 
 import org.springframework.beans.factory.ListableBeanFactory;
 
-import cdi.extension.bridge.spring.annotation.Spring;
+import cdi.extension.bridge.spring.annotation.InjectSpring;
 import cdi.extension.bridge.spring.annotation.SpringLookup;
 
 /**
@@ -28,7 +28,7 @@ import cdi.extension.bridge.spring.annotation.SpringLookup;
  */
 public class SpringBean<T> implements Bean <T> {
 	private static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(CDIPortableExtesionBridgeSpring.class);
-	Spring spring;
+	InjectSpring spring;
 	SpringLookup lookup;
 	Class<T> injectionType; 
 	BeanManager bm;
@@ -36,12 +36,12 @@ public class SpringBean<T> implements Bean <T> {
     InjectionTarget<T> injectionTarget;
 	AnnotatedType<T> annotatedType;
 	
-	SpringBean(AnnotatedType<T> annotatedType, Spring spring, Class<T> injectionType, BeanManager bm){
+	SpringBean(AnnotatedType<T> annotatedType, InjectSpring spring, Class<T> injectionType, BeanManager bm){
 		this.spring = spring;
 		this.injectionType = injectionType;//En el getName de esta variable se encuentra el nombre de la clase
 		this.bm = bm;
 		this.annotatedType = annotatedType;
-		injectionTarget = bm.createInjectionTarget(bm.createAnnotatedType(injectionType));
+		this.injectionTarget = bm.createInjectionTarget(bm.createAnnotatedType(injectionType));
 	}
 	
 	public SpringBean(SpringLookup springLookup, Class<T> type,
@@ -49,6 +49,7 @@ public class SpringBean<T> implements Bean <T> {
 		this.lookup = springLookup;
 		this.injectionType = type;
 		this.bm = bm;
+		this.injectionTarget = bm.createInjectionTarget(bm.createAnnotatedType(injectionType));
 	}
 
 	public String key () {

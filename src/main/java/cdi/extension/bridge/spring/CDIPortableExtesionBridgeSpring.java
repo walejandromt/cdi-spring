@@ -16,7 +16,7 @@ import javax.enterprise.inject.spi.ProcessInjectionTarget;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import cdi.extension.bridge.spring.annotation.Spring;
+import cdi.extension.bridge.spring.annotation.InjectSpring;
 import cdi.extension.bridge.spring.annotation.SpringLookup;
 
 /**
@@ -75,7 +75,7 @@ public class CDIPortableExtesionBridgeSpring implements Extension {
 				}
 				
 				Class<?> injectionType = (Class<?>) point.getType();
-				Spring spring = point.getAnnotated().getAnnotation(Spring.class);
+				InjectSpring spring = point.getAnnotated().getAnnotation(InjectSpring.class);
 				if (spring!=null) {
 					log.debug(">>>>>>>>>>> Inject Spring Anotation");
 					@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -121,135 +121,5 @@ public class CDIPortableExtesionBridgeSpring implements Extension {
 		
 		
 	}
-	
-//	class SpringBean<T> implements Bean <T> {
-//		//InjectionTarget<Object> it;
-//		Spring spring;
-//		SpringLookup lookup;
-//		Class<T> injectionType; 
-//		BeanManager bm;
-//		ListableBeanFactory appCtx;
-//	    InjectionTarget<T> injectionTarget;
-//		AnnotatedType<T> annotatedType;
-//		
-//		SpringBean(AnnotatedType<T> annotatedType, Spring spring, Class<T> injectionType, BeanManager bm){
-//			this.spring = spring;
-//			this.injectionType = injectionType;//En el getName de esta variable se encuentra el nombre de la clase
-//			this.bm = bm;
-//			this.annotatedType = annotatedType;
-//			injectionTarget = bm.createInjectionTarget(bm.createAnnotatedType(injectionType));
-//		}
-//		
-//		public SpringBean(SpringLookup springLookup, Class<T> type,
-//				BeanManager bm) {
-//			this.lookup = springLookup;
-//			this.injectionType = type;
-//			this.bm = bm;
-//		}
-//
-//		public String key () {
-//			return "" + this.getName() + "::" + injectionType.toString();
-//		}
-//		
-//		@SuppressWarnings("all")
-//		class NamedLiteral extends AnnotationLiteral<Named> implements Named {
-//
-//			@Override
-//			public String value() {
-//				return (spring!=null) ? spring.name() : lookup.value();
-//			}
-//			
-//		}
-//
-//		@Override
-//		public Class<?> getBeanClass() {
-//			return this.injectionType;
-//		}
-//
-//		@SuppressWarnings("unchecked")
-//		@Override
-//		public Set<InjectionPoint> getInjectionPoints() {
-//			return Collections.EMPTY_SET;
-//		}
-//		
-//		@Override
-//		public String getName() {
-//			return spring!=null ? spring.name() : lookup.value();
-//		}
-//
-//		@Override
-//		public Set<Annotation> getQualifiers() {
-//			Set<Annotation> qualifiers = new HashSet<Annotation>();	
-//			if (lookup==null) {
-//				qualifiers.add(new NamedLiteral()); //Added this because it causes OWB to fail if there is a Named
-//			}
-//			if (spring!=null) {
-//				qualifiers.add( spring );
-//			} else {
-//				qualifiers.add( lookup );				
-//			}
-//			return qualifiers;
-//		}
-//		
-//		@Override
-//		public Class<? extends Annotation> getScope() {
-//			return Dependent.class;
-//		}
-//
-//		@Override
-//		public Set<Class<? extends Annotation>> getStereotypes() {
-//			return Collections.emptySet();
-//		}
-//
-//		@Override
-//		public Set<Type> getTypes() {
-//			Set<Type> types = new HashSet<Type>(); 
-//			types.add(this.injectionType); 
-//			types.add(Object.class); 
-//			return types;			
-//		}
-//
-//		@Override
-//		public boolean isAlternative() {
-//			return false;
-//		}
-//
-//		@Override
-//		public boolean isNullable() {
-//			return spring != null ? !spring.required() : false;
-//		}
-//		@Override
-//		public T create(CreationalContext<T> ctx) {
-//			
-//			if  (appCtx==null) {
-//				if (spring !=null) {
-//					System.err.printf("############## spring name=%s type=%s \n\n\n", spring.name(), spring.type());
-//				} else {
-//					System.err.printf("############## lookup value=%s \n\n\n", lookup.value());					
-//				}
-//				throw new IllegalStateException("applicationContext was null");
-//			}
-//			
-//			final T t = appCtx.getBean(getName(), injectionType);
-//	        // postconstruct managed by spring
-//	        injectionTarget.inject(t, ctx);
-//	        return t;
-//		}
-//
-//		@Override
-//		public void destroy(T instance, CreationalContext<T> ctx) {
-//			injectionTarget.dispose(instance);
-//			ctx.release();
-//		}
-//
-//		public String toString() {
-//			return String.format("SpringBean(hc=%d, hc=%d, annotatedType=%s, qualifiers=%s)", this.hashCode(), CDIPortableExtesionBridgeSpring.this.hashCode(), this.annotatedType, this.getQualifiers() );
-//		}
-//		
-//		public void setAppCtx(ListableBeanFactory appCtx) {
-//			this.appCtx = appCtx;
-//		}
-//		
-//	}
 
 }

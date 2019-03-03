@@ -13,7 +13,7 @@ import javax.inject.Qualifier;
  * @author walejandromt
  */
 @Qualifier @Retention(RUNTIME) @Target({TYPE, METHOD, FIELD, PARAMETER})
-public @interface Spring {
+public @interface InjectSpring {
 	Class<?> type() default Object.class;
 	String name() default "";
 	@Nonbinding boolean required() default true;
