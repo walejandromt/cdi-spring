@@ -38,7 +38,7 @@ public class CDIPortableExtesionBridgeSpring implements Extension {
      * Start
      */
 	public CDIPortableExtesionBridgeSpring() {
-		log.debug(">>>>>>>>>>> Inicia la Extesion " + this.getClass().getName());
+		log.trace(">>>>>>>>>>> Inicia la Extesion " + this.getClass().getName());
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class CDIPortableExtesionBridgeSpring implements Extension {
 	 * @param bbd
 	 */
 	void beforeBeanDiscovery(@Observes BeforeBeanDiscovery bbd) {
-		log.debug(">>>>>>>>>>> beginning the scanning process " + this.getClass().getName());
+		log.trace(">>>>>>>>>>> beginning the scanning process " + this.getClass().getName());
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class CDIPortableExtesionBridgeSpring implements Extension {
 	 * @param bm
 	 */
 	public void processInjectionTarget (@Observes ProcessInjectionTarget<?> pit, BeanManager bm) {
-		log.debug(">>>>>>>>>>> Inject the scanning process");
+		log.trace(">>>>>>>>>>> Inject the scanning process");
 		Set<InjectionPoint> injectionPoints = pit.getInjectionTarget().getInjectionPoints();
 		
 		synchronized (springBeans) {
@@ -77,14 +77,14 @@ public class CDIPortableExtesionBridgeSpring implements Extension {
 				Class<?> injectionType = (Class<?>) point.getType();
 				InjectSpring spring = point.getAnnotated().getAnnotation(InjectSpring.class);
 				if (spring!=null) {
-					log.debug(">>>>>>>>>>> Inject Spring Anotation");
+					log.trace(">>>>>>>>>>> Inject Spring Anotation");
 					@SuppressWarnings({ "rawtypes", "unchecked" })
 					SpringBean springBean = new SpringBean(pit.getAnnotatedType(), spring, injectionType, bm);
 					springBeans.put(springBean.key(), springBean); //we can do some validation to make sure that this bean is compatible with the one we are replacing.
 				} else {
 					SpringLookup springLookup = point.getAnnotated().getAnnotation(SpringLookup.class);
 					if (springLookup!=null) {
-						log.debug(">>>>>>>>>>> Inject SpringLookup Anotation");
+						log.trace(">>>>>>>>>>> Inject SpringLookup Anotation");
 						@SuppressWarnings({ "rawtypes", "unchecked" })
 						SpringBean springBean = new SpringBean(springLookup, injectionType, bm);
 						springBeans.put(springBean.key(), springBean);
@@ -100,11 +100,11 @@ public class CDIPortableExtesionBridgeSpring implements Extension {
 	 * @param bm
 	 */
 	void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
-		log.debug(">>>>>>>>>>> finished the scanning process");
+		log.trace(">>>>>>>>>>> finished the scanning process");
 		
 		ConfigurableApplicationContext ctx = null;
 		if (Thread.currentThread().getContextClassLoader().getResource(CLASSLOADER_RESOURCE) != null) {
-			log.debug(">>>>>>>>>>> Configuracion de Spring");
+			log.trace(">>>>>>>>>>> Configuracion de Spring");
 			ctx = new ClassPathXmlApplicationContext(CLASSPATH_RMANNIBUCAU_SPRING_CDI_XML);
         }else {
         	log.error("\n\n\n >>>>>>>>>>> El archivo " + CLASSLOADER_RESOURCE + " no existe en el resources de su aplicacion y el Context de Spring no se cargo \n\n\n");
